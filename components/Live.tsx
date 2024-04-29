@@ -1,4 +1,4 @@
-import React, { useCallback ,useState} from 'react'
+import React, { use, useCallback ,useState,useEffect} from 'react'
 import LiveCursors from './cursor/LiveCursors'
 import {  useMyPresence, useOthers } from '@/liveblocks.config'
 import CursorChat from './cursor/CursorChat';
@@ -9,6 +9,28 @@ const Live = () => {
 const others=useOthers();
 const [{cursor}, updateMyPresence]=useMyPresence() as any;
 const [cursorState, setcursorState] = useState({mode:CursorMode.Hidden})
+
+useEffect(()=>{
+    const onKeyUp= (e:KeyboardEvent)=>{
+        if(e.key==='/'){
+            setcursorState({mode:CursorMode.Chat,
+                previousMessage:null,
+                message:'',
+            })
+        }else if(e.key==='Escape'){
+            updateMyPresence({message:''})
+            setcursorState({mode:CursorMode.Hidden})
+        }
+    }
+    const onKeyDown= (e:KeyboardEvent)=>{
+        if(e.key==='Escape'){
+            updateMyPresence({message:''})
+            setcursorState({mode:CursorMode.Hidden})
+        }
+    
+    }
+},[])
+
 
 // Cursor Movement function
 
