@@ -15,6 +15,10 @@ const ReactionSelector = ({ setReaction }: Props) => (
     <ReactionButton reaction='👀' onSelect={setReaction} />
     <ReactionButton reaction='😱' onSelect={setReaction} />
     <ReactionButton reaction='🙁' onSelect={setReaction} />
+    <ReactionButton reaction='🫡' onSelect={setReaction} />
+    <ReactionButton reaction='🧠' onSelect={setReaction} />
+    <ReactionButton reaction='📲' onSelect={setReaction} />
+    <ReactionButton reaction='👨🏼‍💻' onSelect={setReaction} />
   </div>
 );
 
