@@ -3,9 +3,10 @@ import { fabric } from "fabric";
 import Live from "@/components/Live";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
-import { use, useEffect, useRef } from "react";
+import { use, useEffect, useRef,useState } from "react";
 import Navbar from "@/components/Navbar";
 import { handleCanvasMouseDown, handleResize, initializeFabric } from "@/lib/canvas";
+import { ActiveElement } from "@/types/type";
 export default function Page() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -13,6 +14,20 @@ export default function Page() {
   const isDrawing =useRef(false);
   const shapeRef = useRef<fabric.Object | null>(null);
   const selectedShapeRef = useRef<string | null>("rectangle");
+
+  const [activeElement,setActiveElement] = useState<ActiveElement>({
+    name:"",
+    value:"",
+    icon:"",
+  })
+
+  
+
+
+  const handleActiveElementChange = (elem:ActiveElement) =>{
+    setActiveElement(elem);
+    selectedShapeRef.current = elem?.value as string;
+  }
 
   useEffect(()=>{
 const canvas = initializeFabric({canvasRef,fabricRef});
@@ -41,7 +56,9 @@ const canvas = initializeFabric({canvasRef,fabricRef});
   return (
     <main className="h-screen overflow-hidden">
       
-      <Navbar/>
+      <Navbar 
+      activeElement={activeElement}
+      handleActiveElement={handleActiveElementChange}/>
       
       
       <section className="flex h-full flex-row">
