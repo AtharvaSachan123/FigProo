@@ -3,7 +3,7 @@ import { fabric } from "fabric";
 import Live from "@/components/Live";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
-import { use, useEffect, useRef,useState } from "react";
+import {useEffect, useRef,useState } from "react";
 import Navbar from "@/components/Navbar";
 import { handleCanvasMouseDown, handleCanvasMouseUp, handleCanvasObjectModified, handleCanvaseMouseMove, handleResize, initializeFabric, renderCanvas } from "@/lib/canvas";
 import { ActiveElement } from "@/types/type";
@@ -159,7 +159,7 @@ const canvas = initializeFabric({canvasRef,fabricRef});
       
       
       <section className="flex h-full flex-row">
-        <LeftSidebar />
+        <LeftSidebar allShapes={Array.from(canvasObjects)} />
         <Live canvasRef={canvasRef}/>
         <RightSidebar />
       </section>
