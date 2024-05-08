@@ -6,11 +6,16 @@ import RightSidebar from "@/components/RightSidebar";
 import {useEffect, useRef,useState } from "react";
 import Navbar from "@/components/Navbar";
 import { handleCanvasMouseDown, handleCanvasMouseUp, handleCanvasObjectModified, handleCanvaseMouseMove, handleResize, initializeFabric, renderCanvas } from "@/lib/canvas";
-import { ActiveElement } from "@/types/type";
-import { useMutation, useStorage } from "@/liveblocks.config";
+import { ActiveElement} from "@/types/type";
+import { useMutation, useRedo, useStorage, useUndo } from "@/liveblocks.config";
 import { defaultNavElement } from "@/constants";
-import { handleDelete } from "@/lib/key-events";
+import { handleDelete, handleKeyDown } from "@/lib/key-events";
+
 export default function Page() {
+
+
+  const undo=useUndo();
+  const redo=useRedo();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<fabric.Canvas | null>(null);
@@ -84,7 +89,7 @@ export default function Page() {
   useEffect(()=>{
 const canvas = initializeFabric({canvasRef,fabricRef});
 
-    canvas.on("mouse:down",(options)=>{
+    canvas.on("mouse:down",(options:any)=>{
       handleCanvasMouseDown({
         options,
         canvas,
@@ -95,7 +100,7 @@ const canvas = initializeFabric({canvasRef,fabricRef});
     })
 
 
-    canvas.on("mouse:move",(options)=>{
+    canvas.on("mouse:move",(options:any)=>{
       handleCanvaseMouseMove({
         options,
         canvas,
@@ -106,7 +111,7 @@ const canvas = initializeFabric({canvasRef,fabricRef});
       })
     })
 
-    canvas.on("mouse:up",(options)=>{
+    canvas.on("mouse:up",()=>{
       handleCanvasMouseUp({
         canvas,
         isDrawing,
@@ -118,7 +123,7 @@ const canvas = initializeFabric({canvasRef,fabricRef});
       })
     })
 
-    canvas.on("object:modified",(options)=>{
+    canvas.on("object:modified",(options:any)=>{
       handleCanvasObjectModified({
       options,
       syncShapeInStorage,
@@ -138,6 +143,18 @@ const canvas = initializeFabric({canvasRef,fabricRef});
     }
 
   },[]);
+
+  window.addEventListener("keydown",(e)=>{
+    handleKeyDown({
+      e,
+      canvas:fabricRef.current,
+      undo,
+      redo,
+      syncShapeInStorage,
+      deleteShapeFromStorage,
+    })
+  })
+
 
 
   useEffect(()=>{
