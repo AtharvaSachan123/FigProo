@@ -17,9 +17,10 @@ import { shortcuts } from '@/constants';
 
 type Props = {
 canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
-
+undo:()=>void;
+redo:()=>void;
 }
-const Live = ({canvasRef}:Props) => {
+const Live = ({canvasRef,undo,redo}:Props) => {
   const others = useOthers();
   const [{ cursor }, updateMyPresence] = useMyPresence() as any;
   const [cursorState, setCursorState] = useState<CursorState>({ mode: CursorMode.Hidden });
@@ -134,6 +135,30 @@ const setReactions = useCallback((reaction:string)=>{
 
 },[])
 
+const handleContextMenuClick = useCallback((key: string) => {
+  switch (key) {
+    case "Chat":
+      setCursorState({
+        mode: CursorMode.Chat,
+        previousMessage: null,
+        message: "",
+      });
+      break;
+    case "Reaction":
+      setCursorState({
+        mode: CursorMode.ReactionSelector,
+      });
+      break;
+      case "Undo":
+        undo();
+        break;
+      case "Redo":
+        redo();
+        break;
+        default:
+          break;
+  }
+}, []);
 
 
 
@@ -185,7 +210,10 @@ const setReactions = useCallback((reaction:string)=>{
     </ContextMenuTrigger>
         <ContextMenuContent className='right-menu-content'>
           {shortcuts.map((item)=>(
-            <ContextMenuItem key={item.key} className='right-menu-content'>
+            <ContextMenuItem key={item.key} className='right-menu-content'
+            onClick={()=>{
+              handleContextMenuClick(item.name);
+            }}>
               <p>{item.name}</p>
               <p className='text-xs text-primary-grey-300'> {item.shortcut}</p>
             </ContextMenuItem>
