@@ -25,7 +25,7 @@ export default function Page() {
   const selectedShapeRef = useRef<string | null>(null);
   const activeObjectRef = useRef<fabric.Object | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
-  const isEditingRef = useRef(false);
+  const isEditingRef=useRef(false);
 
   const [activeElement,setActiveElement] = useState<ActiveElement>({
     name:"",
