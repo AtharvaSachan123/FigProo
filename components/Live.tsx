@@ -6,6 +6,15 @@ import { CursorMode, CursorState,Reaction, ReactionEvent } from '@/types/type';
 import ReactionSelector from './reaction/ReactionButton';
 import FlyingReaction from './reaction/FlyingReaction';
 import useInterval from '@/hooks/useInterval';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
+import { shortcuts } from '@/constants';
+
+
 type Props = {
 canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
 
@@ -130,7 +139,8 @@ const setReactions = useCallback((reaction:string)=>{
 
 
   return (
-    <div
+   <ContextMenu>
+     <ContextMenuTrigger
       id='canvas'
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
@@ -172,7 +182,18 @@ const setReactions = useCallback((reaction:string)=>{
         )}
 
       <LiveCursors others={others} />
-    </div>
+    </ContextMenuTrigger>
+        <ContextMenuContent className='right-menu-content'>
+          {shortcuts.map((item)=>(
+            <ContextMenuItem key={item.key} className='right-menu-content'>
+              <p>{item.name}</p>
+              <p className='text-xs text-primary-grey-300'> {item.shortcut}</p>
+            </ContextMenuItem>
+          ))}
+        </ContextMenuContent>
+
+
+   </ContextMenu>
   );
 };
 
